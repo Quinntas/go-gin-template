@@ -15,7 +15,7 @@ func Init(uri string) error {
 	}
 	err = db.Ping()
 	if err != nil {
-		panic(err)
+		return err
 	}
 	client = db
 	return nil

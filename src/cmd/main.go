@@ -7,12 +7,15 @@ import (
 
 func main() {
 	r := gin.Default()
-	web.Get(r, "/ping", func(c *gin.Context) error {
+
+	web.Get(r, "/", func(c *gin.Context) error {
 		web.JsonResponse(c, 200, gin.H{
-			"message": "pong"})
+			"message": "Hello, World!"})
 		return nil
 	})
+
 	err := r.Run()
+
 	if err != nil {
 		return
 	}
