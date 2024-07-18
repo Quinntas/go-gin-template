@@ -1,6 +1,9 @@
 package web
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
+	"github.com/gin-gonic/gin"
+)
 
 func handleError(c *gin.Context, err error) {
 	switch t := err.(type) {
@@ -11,9 +14,10 @@ func handleError(c *gin.Context, err error) {
 	}
 }
 
-func handler(c *gin.Context, controller Controller) {
-	err := controller(c)
+func handler(app *App, c *gin.Context, controller Controller) {
+	err := controller(app, c)
 	if err != nil {
 		handleError(c, err)
 	}
+	fmt.Println(err.Error())
 }

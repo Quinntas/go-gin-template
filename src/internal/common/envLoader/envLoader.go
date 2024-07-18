@@ -1,9 +1,8 @@
-package env
+package envLoader
 
 import (
-	"os"
-
 	"github.com/joho/godotenv"
+	"os"
 )
 
 func getEnv(key string, required bool) string {
@@ -22,17 +21,17 @@ type Variables struct {
 	JwtSecret   string
 }
 
-func NewVariables() Variables {
+func NewVariables() (*Variables, error) {
 	err := godotenv.Load()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return Variables{
+	return &Variables{
 		Port:        getEnv("PORT", true),
 		DatabaseURL: getEnv("DATABASE_URL", true),
 		RedisURL:    getEnv("REDIS_URL", true),
 		Pepper:      getEnv("PEPPER", true),
 		JwtSecret:   getEnv("JWT_SECRET", true),
-	}
+	}, nil
 }

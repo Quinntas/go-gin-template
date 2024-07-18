@@ -2,4 +2,4 @@ package web
 
 import "github.com/gin-gonic/gin"
 
-type Controller func(c *gin.Context) error
+type Controller func(app *App, c *gin.Context) error

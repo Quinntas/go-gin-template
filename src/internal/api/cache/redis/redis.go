@@ -7,22 +7,26 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-type Client struct {
+type Redis struct {
 	client *redis.Client
 }
 
-func NewClient(uri string) (client *Client, err error) {
+func NewRedis(uri string) (client *Redis, err error) {
 	opt, err := redis.ParseURL(uri)
 	if err != nil {
 		return nil, err
 	}
-	return &Client{client: redis.NewClient(opt)}, nil
+	return &Redis{client: redis.NewClient(opt)}, nil
 }
 
-func (redis *Client) Set(key string, value string, expiration time.Duration) error {
+func (redis *Redis) Set(key string, value string, expiration time.Duration) error {
 	return redis.client.Set(context.Background(), key, value, expiration).Err()
 }
 
-func (redis *Client) Get(key string) (string, error) {
+func (redis *Redis) Get(key string) (string, error) {
 	return redis.client.Get(context.Background(), key).Result()
+}
+
+func (redis *Redis) Close() error {
+	return redis.client.Close()
 }

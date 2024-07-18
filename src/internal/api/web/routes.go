@@ -2,16 +2,16 @@ package web
 
 import "github.com/gin-gonic/gin"
 
-func Route(r *gin.Engine, method string, path string, controller Controller) {
-	r.Handle(method, path, func(c *gin.Context) {
-		handler(c, controller)
+func Route(routerGroup *gin.RouterGroup, app *App, method string, path string, controller Controller) {
+	routerGroup.Handle(method, path, func(c *gin.Context) {
+		handler(app, c, controller)
 	})
 }
 
-func Get(r *gin.Engine, path string, controller Controller) {
-	Route(r, "GET", path, controller)
+func Get(routerGroup *gin.RouterGroup, app *App, path string, controller Controller) {
+	Route(routerGroup, app, "GET", path, controller)
 }
 
-func Post(r *gin.Engine, path string, controller Controller) {
-	Route(r, "POST", path, controller)
+func Post(routerGroup *gin.RouterGroup, app *App, path string, controller Controller) {
+	Route(routerGroup, app, "POST", path, controller)
 }

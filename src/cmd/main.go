@@ -1,22 +1,40 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/quinntas/go-gin-template/src/internal/api/cache/redis"
+	"github.com/quinntas/go-gin-template/src/internal/api/database/mysql"
 	"github.com/quinntas/go-gin-template/src/internal/api/web"
+	"github.com/quinntas/go-gin-template/src/internal/common/envLoader"
+	"github.com/quinntas/go-gin-template/src/modules/shared"
 )
 
 func main() {
-	r := gin.Default()
-
-	web.Get(r, "/", func(c *gin.Context) error {
-		web.JsonResponse(c, 200, gin.H{
-			"message": "Hello, World!"})
-		return nil
-	})
-
-	err := r.Run()
-
+	env, err := envLoader.NewVariables()
 	if err != nil {
-		return
+		panic(err)
+	}
+
+	rwDB, err := mysql.NewMysql(env.DatabaseURL)
+	if err != nil {
+		panic(err)
+	}
+
+	cache, err := redis.NewRedis(env.RedisURL)
+	if err != nil {
+		panic(err)
+	}
+
+	app := web.NewApp(
+		env,
+		rwDB,
+		rwDB,
+		cache,
+	)
+
+	shared.V1Router(app)
+
+	err = app.Run()
+	if err != nil {
+		panic(err)
 	}
 }
