@@ -8,7 +8,9 @@ import (
 func main() {
 	r := gin.Default()
 	web.Get(r, "/ping", func(c *gin.Context) error {
-		return web.NotFound()
+		web.JsonResponse(c, 200, gin.H{
+			"message": "pong"})
+		return nil
 	})
 	err := r.Run()
 	if err != nil {
