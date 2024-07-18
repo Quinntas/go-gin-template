@@ -8,6 +8,16 @@
 *.so
 *.dylib
 
+./vendor
+./vendor/*
+vendor
+vendor/*
+.env
+/tmp
+
+.vscode
+.idea
+
 # Test binary, built with `go test -c`
 *.test
 
@@ -19,3 +29,4 @@
 
 # Go workspace file
 go.work
+vendor/modules.txt
