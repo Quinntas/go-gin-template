@@ -2,8 +2,9 @@ package mysql
 
 import (
 	"database/sql"
-	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
+	"github.com/quinntas/go-gin-template/src/internal/api/database"
+	"github.com/quinntas/go-gin-template/src/internal/utils"
 )
 
 type Mysql struct {
@@ -22,18 +23,42 @@ func NewMysql(uri string) (*Mysql, error) {
 	return &Mysql{client: conn}, nil
 }
 
+func (db *Mysql) Insert(query string, args ...interface{}) (database.InsertResult, error) {
+	res, err := db.client.Exec(query, args...)
+	if err != nil {
+		return database.InsertResult{}, err
+	}
+	id, err := res.LastInsertId()
+	if err != nil {
+		return database.InsertResult{}, err
+	}
+	return database.NewInsertResult(id), nil
+}
+
+func (db *Mysql) Update(query string, args ...interface{}) (database.UpdateResult, error) {
+	res, err := db.client.Exec(query, args...)
+	if err != nil {
+		return database.UpdateResult{}, err
+	}
+	rows, err := res.RowsAffected()
+	if err != nil {
+		return database.UpdateResult{}, err
+	}
+	return database.NewUpdateResult(rows), nil
+}
+
 func (db *Mysql) Exec(query string, args ...interface{}) (sql.Result, error) {
 	return db.client.Exec(query, args...)
 }
 
-func (db *Mysql) Query(query string, args ...interface{}) ([]gin.H, error) {
+func (db *Mysql) Query(query string, args ...interface{}) ([]utils.H, error) {
 	rows, err := db.client.Queryx(query, args...)
 	if err != nil {
 		return nil, err
 	}
-	results := make([]gin.H, 0)
+	results := make([]utils.H, 0)
 	for rows.Next() {
-		var row gin.H
+		var row utils.H
 		err = rows.StructScan(&row)
 		if err != nil {
 			return nil, err

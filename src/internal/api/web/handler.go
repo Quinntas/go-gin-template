@@ -14,8 +14,8 @@ func handleError(c *gin.Context, err error) {
 	}
 }
 
-func handler(app *App, c *gin.Context, controller Controller) {
-	err := controller(app, c)
+func handler(c *gin.Context, controller Controller) {
+	err := controller(c)
 	if err != nil {
 		handleError(c, err)
 	}

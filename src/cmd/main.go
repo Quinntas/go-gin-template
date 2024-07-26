@@ -1,11 +1,12 @@
 package main
 
 import (
+	"github.com/gin-gonic/gin"
+	"github.com/quinntas/go-gin-template/src/globals"
 	"github.com/quinntas/go-gin-template/src/internal/api/cache/redis"
 	"github.com/quinntas/go-gin-template/src/internal/api/database/mysql"
-	"github.com/quinntas/go-gin-template/src/internal/api/web"
 	"github.com/quinntas/go-gin-template/src/internal/common/envLoader"
-	"github.com/quinntas/go-gin-template/src/modules/shared"
+	"github.com/quinntas/go-gin-template/src/modules/support/routers"
 )
 
 func main() {
@@ -14,26 +15,23 @@ func main() {
 		panic(err)
 	}
 
-	rwDB, err := mysql.NewMysql(env.DatabaseURL)
+	globals.RWDatabase, err = mysql.NewMysql(env.DatabaseURL)
 	if err != nil {
 		panic(err)
 	}
+	defer globals.RWDatabase.Close()
 
-	cache, err := redis.NewRedis(env.RedisURL)
+	globals.Cache, err = redis.NewRedis(env.RedisURL)
 	if err != nil {
 		panic(err)
 	}
+	defer globals.Cache.Close()
 
-	app := web.NewApp(
-		env,
-		rwDB,
-		rwDB,
-		cache,
-	)
+	engine := gin.Default()
 
-	shared.V1Router(app)
+	routers.V1(engine)
 
-	err = app.Run()
+	err = engine.Run()
 	if err != nil {
 		panic(err)
 	}

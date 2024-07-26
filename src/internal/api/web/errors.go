@@ -1,14 +1,17 @@
 package web
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/quinntas/go-gin-template/src/internal/utils"
+)
 
 type HttpError struct {
 	status  int
 	message string
-	body    gin.H
+	body    utils.H
 }
 
-func NewHttpError(status int, message string, body gin.H) *HttpError {
+func NewHttpError(status int, message string, body utils.H) *HttpError {
 	return &HttpError{status, message, body}
 }
 
@@ -22,9 +25,13 @@ func (he *HttpError) serialize(c *gin.Context) {
 }
 
 func NotFound() *HttpError {
-	return NewHttpError(404, "Not Found", gin.H{})
+	return NewHttpError(404, "Not Found", utils.H{})
 }
 
 func InternalServerError() *HttpError {
-	return NewHttpError(500, "Internal Server Error", gin.H{})
+	return NewHttpError(500, "Internal Server Error", utils.H{})
+}
+
+func InvalidRequest() *HttpError {
+	return NewHttpError(400, "Invalid Request", utils.H{})
 }
