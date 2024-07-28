@@ -8,7 +8,7 @@ import (
 func Controller(c *gin.Context) error {
 	var dto DTO
 
-	if err := c.ShouldBindJSON(&dto); err != nil {
+	if err := c.BindJSON(&dto); err != nil {
 		return web.InvalidRequest()
 	}
 
@@ -18,7 +18,7 @@ func Controller(c *gin.Context) error {
 		return err
 	}
 
-	web.JsonResponse(c, 200, res)
+	web.JsonResponse(c, 201, res)
 
 	return nil
 }

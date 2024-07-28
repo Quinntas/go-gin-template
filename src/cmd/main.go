@@ -14,14 +14,15 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	globals.Env = env
 
-	globals.RWDatabase, err = mysql.NewMysql(env.DatabaseURL)
+	globals.RWDatabase, err = mysql.NewMysql(globals.Env.DatabaseURL)
 	if err != nil {
 		panic(err)
 	}
 	defer globals.RWDatabase.Close()
 
-	globals.Cache, err = redis.NewRedis(env.RedisURL)
+	globals.Cache, err = redis.NewRedis(globals.Env.RedisURL)
 	if err != nil {
 		panic(err)
 	}
