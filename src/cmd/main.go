@@ -6,7 +6,7 @@ import (
 	"github.com/quinntas/go-gin-template/src/internal/api/cache/redis"
 	"github.com/quinntas/go-gin-template/src/internal/api/database/mysql"
 	"github.com/quinntas/go-gin-template/src/internal/common/envLoader"
-	"github.com/quinntas/go-gin-template/src/modules/support/routers"
+	"github.com/quinntas/go-gin-template/src/modules/shared/routers"
 )
 
 func main() {
