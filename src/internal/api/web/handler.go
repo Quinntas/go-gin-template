@@ -6,6 +6,7 @@ import (
 )
 
 func handleError(c *gin.Context, err error) {
+	fmt.Println(err.Error())
 	switch t := err.(type) {
 	case *HttpError:
 		t.serialize(c)
@@ -19,5 +20,4 @@ func handler(c *gin.Context, controller Controller) {
 	if err != nil {
 		handleError(c, err)
 	}
-	fmt.Println(err.Error())
 }
